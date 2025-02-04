@@ -13,28 +13,8 @@ class BarangInventarisController extends Controller
     public function index()
     {
 
-        // $data['barangInventaris'] = BarangInventaris::with('users')->where('br_status', '!=', 0)->get();
-        // $data['barangInventaris'] = DB::table('tm_barang_inventaris')
-        // ->select('tm_barang_inventaris.*', 'latest_peminjaman.pdb_sts')
-        // ->leftJoinSub(
-        //     DB::table('td_peminjaman_barang')
-        //         ->select('br_kode', 'pdb_sts', 'created_at')
-        //         ->whereIn('br_kode', function ($query) {
-        //             $query->select('br_kode')
-        //                 ->from('td_peminjaman_barang')
-        //                 ->groupBy('br_kode')
-        //                 ->havingRaw('MAX(created_at) = created_at');
-        //         })
-        //         ->where('pdb_sts', '=', 0), 
-        //     'latest_peminjaman',
-        //     function ($join) {
-        //         $join->on('tm_barang_inventaris.br_kode', '=', 'latest_peminjaman.br_kode');
-        //     }
-        // )
-        // ->orderBy('latest_peminjaman.created_at', 'desc')
-        // ->get();
         $data['barangInventaris'] = DB::table('tm_barang_inventaris')
-        ->select('tm_barang_inventaris.*', 'tr_jenis_barang.jns_brg_nama', 'latest_peminjaman.pdb_sts')
+        ->select('tm_barang_inventaris.*', 'tr_jenis_barang.jns_brg_nama', DB::raw('ifnull(latest_peminjaman.pdb_sts, 0) as pdb_sts') )
         ->leftJoin('tr_jenis_barang', 'tm_barang_inventaris.jns_brg_kode', '=', 'tr_jenis_barang.jns_brg_kode')
         ->leftJoinSub(
             DB::table('td_peminjaman_barang')
@@ -44,14 +24,14 @@ class BarangInventarisController extends Controller
                         ->from('td_peminjaman_barang')
                         ->groupBy('br_kode')
                         ->havingRaw('MAX(created_at) = created_at');
-                })
-                ->where('pdb_sts', '=', 0), 
+                }),
+                // ->where('pdb_sts', '=', 0),
             'latest_peminjaman',
             function ($join) {
                 $join->on('tm_barang_inventaris.br_kode', '=', 'latest_peminjaman.br_kode');
             }
         )
-        ->orderBy('latest_peminjaman.created_at', 'desc')
+        ->orderBy('tm_barang_inventaris.created_at', 'desc')
         ->get();
 
         $data['users'] = Auth::user()->user_nama;
@@ -92,7 +72,13 @@ class BarangInventarisController extends Controller
             'br_status' => 'required',
         ]);
 
-        $br_kode = 'INV' . date('Y') . str_pad(BarangInventaris::count() + 1, 5, '0', STR_PAD_LEFT);
+        $current_year = date('Y');
+        $last_br = BarangInventaris::where('br_kode', 'like', 'INV' . $current_year . '%')->orderBy('created_at', 'desc')->first()->br_kode;
+
+        // print_r(substr($last_br, 7)+1);
+        $current_number = substr($last_br, 7)+1;
+        $br_kode = 'INV'  . $current_year . str_pad($current_number, 5, '0', STR_PAD_LEFT);
+        // print_r($br_kode);
         $br_tgl_entry = date('Y-m-d');
 
         BarangInventaris::create([

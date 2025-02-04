@@ -48,11 +48,11 @@
             <li class="nav-item nav-profile dropdown">
               <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
                 <div class="nav-profile-img">
-                  <img src="{{ asset('asset') }}/assets/images/faces/face1.jpg" alt="image">
+                  <img src="{{ asset('asset') }}/assets/images/faces/face2.jpg" alt="image">
                   <span class="availability-status online"></span>
                 </div>
                 <div class="nav-profile-text">
-                  <p class="mb-1 text-black">{{ Auth::user()->user_nama }}</p>
+                  <p class="mb-1 text-black">{{ Auth::user()->user_hak }}</p>
                 </div>
               </a>
 
@@ -131,7 +131,7 @@
             <li class="nav-item nav-profile">
               <a href="#" class="nav-link">
                 <div class="nav-profile-image">
-                  <img src="{{ asset('asset') }}/assets/images/faces/face1.jpg" alt="profile" />
+                  <img src="{{ asset('asset') }}/assets/images/faces/face2.jpg" alt="profile" />
                   <span class="login-status online"></span>
                   <!--change to offline or busy as needed-->
                 </div>
@@ -189,6 +189,7 @@
               </div>
             </li>
 
+            @if(Auth::user()->user_hak == 'SU' || Auth::user()->user_hak == 'AD')
             <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="collapse" href="#laporan" aria-expanded="false" aria-controls="laporan">
                   <span class="menu-title">Laporan</span>
@@ -210,7 +211,9 @@
                   </ul>
                 </div>
             </li>
-            
+            @endif
+
+            @if(Auth::user()->user_hak == 'SU' || Auth::user()->user_hak == 'AD')
             <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="collapse" href="#referensi" aria-expanded="false" aria-controls="referensi">
                   <span class="menu-title">Referensi</span>
@@ -229,6 +232,7 @@
                   </ul>
                 </div>
             </li>
+            @endif
               
           </ul>
         </nav>

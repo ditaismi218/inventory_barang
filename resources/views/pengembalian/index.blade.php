@@ -41,7 +41,7 @@
                     <button data-id="{{ $item->pb_id }}" class="btn btn-info btn-sm btn-kembali">
                         Kembalikan Barang
                     </button>
-                   
+                    
                 </td>
             </tr>
             @endforeach
