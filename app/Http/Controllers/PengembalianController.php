@@ -24,15 +24,27 @@ class PengembalianController extends Controller
         return view('pengembalian.index', $data);
     }
 
+    // public function indexKembali()
+    // {
+    //     // Ambil data barang yang sudah dikembalikan
+    //     // $data['pengembalian_data'] = Pengembalian::where('kembali_sts', '1')->get();
+    //     $data['pengembalian_data'] = DB::table('tm_pengembalian')
+    //     ->join('tm_peminjaman', 'tm_peminjaman.pb_id', '=', 'tm_pengembalian.pb_id')
+    //     ->select('tm_pengembalian.*', 'tm_peminjaman.pb_nama_siswa')
+    //     ->where('tm_pengembalian.kembali_sts', '1')
+    //     ->get();
+
+    //     return view('pengembalian.barang', $data);
+    // }
+
     public function indexKembali()
     {
-        // Ambil data barang yang sudah dikembalikan
-        // $data['pengembalian_data'] = Pengembalian::where('kembali_sts', '1')->get();
         $data['pengembalian_data'] = DB::table('tm_pengembalian')
         ->join('tm_peminjaman', 'tm_peminjaman.pb_id', '=', 'tm_pengembalian.pb_id')
-        ->select('tm_pengembalian.*', 'tm_peminjaman.pb_nama_siswa')
+        ->join('tm_siswa', 'tm_siswa.siswa_id', '=', 'tm_peminjaman.siswa_id')
+        ->select('tm_pengembalian.*', 'tm_siswa.siswa_nama', 'tm_siswa.siswa_id') // Tambahkan siswa_id
         ->where('tm_pengembalian.kembali_sts', '1')
-        ->get();
+        ->get();    
 
         return view('pengembalian.barang', $data);
     }
@@ -46,9 +58,6 @@ class PengembalianController extends Controller
 
         return view('pengembalian.detail', compact('peminjaman_barang'));
     }
-
-    
-
 
     public function store(Request $request)
     {

@@ -24,7 +24,7 @@
                         <tr>
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $pengembalian->kembali_id }}</td>
-                            <td>{{ $pengembalian->pb_nama_siswa }}</td>
+                            <td>{{ $pengembalian->siswa_nama ?? 'Tidak Ada Nama' }}</td>
                             <td>{{ $pengembalian->kembali_tgl }}</td>
                             <td>
                                 @if($pengembalian->kembali_sts == 1)

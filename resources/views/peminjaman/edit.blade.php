@@ -7,36 +7,30 @@
     <form action="{{ route('peminjaman.update', $peminjaman->pb_id) }}" method="POST" class="space-y-4">
         @csrf
         @method('put')
-        
-        {{-- Nomor Siswa --}}
-        <div class="mb-4">
-            <label for="pb_no_siswa" class="block mb-2 font-medium text-gray-700">Nomor Siswa</label>
-            <input 
-                type="text" 
-                name="pb_no_siswa" 
-                id="pb_no_siswa" 
-                value="{{ old('pb_no_siswa', $peminjaman->pb_no_siswa) }}" 
-                class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
-            >
-            @error('pb_no_siswa')
-                <span class="text-red-500 text-sm">{{ $message }}</span>
-            @enderror
-        </div>
 
-        {{-- Nama Siswa --}}
-        <div class="mb-4">
-            <label for="pb_nama_siswa" class="block mb-2 font-medium text-gray-700">Nama Siswa</label>
-            <input 
-                type="text" 
-                name="pb_nama_siswa" 
-                id="pb_nama_siswa" 
-                value="{{ old('pb_nama_siswa', $peminjaman->pb_nama_siswa) }}" 
-                class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
-            >
-            @error('pb_nama_siswa')
-                <span class="text-red-500 text-sm">{{ $message }}</span>
-            @enderror
-        </div>
+       {{-- Nama Siswa --}}
+       <div class="mb-4">
+        <label for="siswa_id" class="block mb-2 font-medium text-gray-700">Nama Siswa</label>
+        <select 
+            name="siswa_id" 
+            id="siswa_id" 
+            class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
+            required
+        >
+            <option value="">Pilih Nama Siswa</option>
+            @foreach ($siswas as $siswa)
+                <option value="{{ $siswa->siswa_id }}" 
+                    {{ old('siswa_id', $peminjaman->siswa_id ?? '') == $siswa->siswa_id ? 'selected' : '' }}>
+                    {{ $siswa->siswa_nama }}
+                </option>
+            @endforeach
+        </select>
+    
+        @error('siswa_id')
+            <span class="text-red-500 text-sm">{{ $message }}</span>
+        @enderror
+    </div>    
+
 
         <div class="mb-4">
             <label for="pb_harus_kembali_tgl" class="block mb-2 font-medium text-gray-700">Tanggal Pengembalian</label>

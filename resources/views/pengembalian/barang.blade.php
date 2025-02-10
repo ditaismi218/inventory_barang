@@ -30,7 +30,7 @@
             <tr>
                 <td>{{ $item->kembali_id }}</td>
                 <td>{{ $item->pb_id }}</td>
-                <td>{{ $item->pb_nama_siswa }}</td>
+                <td>{{ $item->siswa_nama ?? 'Tidak Ada Nama' }}</td>
                 <td>{{ $item->kembali_tgl }}</td>
                 <td><span class="badge badge-success">Sudah Dikembalikan</span></td>
                 <td>

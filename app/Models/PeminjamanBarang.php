@@ -27,12 +27,16 @@ class PeminjamanBarang extends Model
 
     public function barang()
     {
-        return $this->belongsTo(BarangInventaris::class, 'br_kode', 'br_kode');
+        return $this->belongsTo(BarangInventaris::class, 'br_kode', 'br_kode' );
     }
 
     public function barangInventaris()
     {
         return $this->belongsTo(BarangInventaris::class, 'br_kode', 'br_kode');
+    }
+
+    public function siswa(){
+        return $this->belongsTo(Siswa::class, 'siswa_id', 'siswa_id');
     }
 
     

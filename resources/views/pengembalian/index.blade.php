@@ -31,7 +31,7 @@
             @foreach ($peminjaman as $item)
             <tr>
                 <td>{{ $item->pb_id }}</td>
-                <td>{{ $item->pb_nama_siswa }}</td>
+                <td>{{ $item->siswa?->siswa_nama ?? 'Tidak Ada Data' }}</td>
                 <td>{{ $item->pb_tgl }}</td>
                 <td>{{ $item->pb_harus_kembali_tgl }}</td>
                 {{-- <td>{{ $item->pb_stat }}</td> --}}

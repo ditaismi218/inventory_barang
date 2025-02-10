@@ -3,63 +3,116 @@
 @section('content')
 <!-- Dashboard Content -->
 <div class="row">
+
+  <div class="page-header">
+    <h3 class="page-title">
+      <span class="page-title-icon bg-gradient-primary text-white me-2">
+        <i class="mdi mdi-home"></i>
+      </span> Dashboard
+    </h3>
+    <nav aria-label="breadcrumb">
+      <ul class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">
+          <span></span>Overview <i class="mdi mdi-alert-circle-outline icon-sm text-primary align-middle"></i>
+        </li>
+      </ul>
+    </nav>
+  </div>
     <!-- Jumlah Barang yang Sudah Dientry -->
-    <div class="col-md-6 stretch-card grid-margin">
+    <div class="col-md-4 stretch-card grid-margin">
         <div class="card bg-gradient-danger card-img-holder text-white">
           <div class="card-body">
             <img src="{{ asset('asset') }}/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-            <h4 class="font-weight-normal mb-3">Jumlah Barang yang Dientry <i class="mdi mdi-chart-line mdi-24px float-end"></i>
+            <h4 class="font-weight-normal mb-3">Total Barang <i class="mdi mdi-chart-line mdi-24px float-end"></i>
             </h4>
-            <h2 class="mb-5">{{ $totalBarang }}</h2>
+            <h2 class="mb-2">{{ $totalBarang }}</h2>
             {{-- <h6 class="card-text">Barang</h6> --}}
           </div>
         </div>
       </div>
 
-      <div class="col-md-6 stretch-card grid-margin">
-        <div class="card bg-gradient-danger card-img-holder text-white">
-          <div class="card-body">
-            <img src="{{ asset('asset') }}/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-            <h4 class="font-weight-normal mb-3">Jumlah Barang yang Dientry <i class="mdi mdi-chart-line mdi-24px float-end"></i>
-            </h4>
-            <h2 class="mb-5">{{ $tersedia }}</h2>
-            {{-- <h6 class="card-text">Barang</h6> --}}
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 stretch-card grid-margin">
-        <div class="card bg-gradient-danger card-img-holder text-white">
-          <div class="card-body">
-            <img src="{{ asset('asset') }}/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-            <h4 class="font-weight-normal mb-3">Jumlah Barang yang Dientry <i class="mdi mdi-chart-line mdi-24px float-end"></i>
-            </h4>
-            <h2 class="mb-5">{{ $tidak_tersedia }}</h2>
-            {{-- <h6 class="card-text">Barang</h6> --}}
-          </div>
-        </div>
-      </div>
-
-    <!-- Jumlah Transaksi Peminjaman -->
-    <div class="col-md-6 stretch-card grid-margin">
+      <div class="col-md-4 stretch-card grid-margin">
         <div class="card bg-gradient-info card-img-holder text-white">
           <div class="card-body">
             <img src="{{ asset('asset') }}/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-            <h4 class="font-weight-normal mb-3">Jumlah Transaksi Peminjaman <i class="mdi mdi-bookmark-outline mdi-24px float-end"></i>
+            <h4 class="font-weight-normal mb-3">Total Barang <br> Tersedia <i class="mdi mdi-chart-line mdi-24px float-end"></i>
             </h4>
-            <h2 class="mb-5">{{ $totalPeminjaman }}</h2>
-            {{-- <h6 class="card-text">Decreased by 10%</h6> --}}
+            <h2 class="mb-2">{{ $tersedia }}</h2>
+            {{-- <h6 class="card-text">Barang</h6> --}}
           </div>
+        </div>
+      </div>
+      <div class="col-md-4 stretch-card grid-margin">
+        <div class="card bg-gradient-success card-img-holder text-white">
+          <div class="card-body">
+            <img src="{{ asset('asset') }}/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+            <h4 class="font-weight-normal mb-3">Total Barang Tidak Tersedia <i class="mdi mdi-chart-line mdi-24px float-end"></i>
+            </h4>
+            <h2 class="mb-2">{{ $tidak_tersedia }}</h2>
+            {{-- <h6 class="card-text">Barang</h6> --}}
+          </div>
+        </div>
+      </div>
+
+    <!-- Jumlah Barang Rusak -->
+    <div class="col-md-6 stretch-card grid-margin">
+      <div class="card bg-gradient-primary card-img-holder text-white">
+        <div class="card-body">
+          <img src="{{ asset('asset') }}/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+          <h4 class="font-weight-normal mb-3">Total Barang Rusak <i class="mdi mdi-bookmark-outline mdi-24px float-end"></i>
+          </h4>
+          <h2 class="mb-2">{{ $barangRusak }}</h2>
+          {{-- <h6 class="card-text">Decreased by 10%</h6> --}}
         </div>
       </div>
     </div>
 
-    <h1>{{$durasi_peminjaman}}</h1>
+    <!-- Jumlah Transaksi Peminjaman -->
+    <div class="col-md-6 stretch-card grid-margin">
+      <div class="card bg-gradient-dark card-img-holder text-white">
+        <div class="card-body">
+          <img src="{{ asset('asset') }}/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+          <h4 class="font-weight-normal mb-3">Jumlah Transaksi Peminjaman <i class="mdi mdi-bookmark-outline mdi-24px float-end"></i>
+          </h4>
+          <h2 class="mb-2">{{ $totalPeminjaman }}</h2>
+          {{-- <h6 class="card-text">Decreased by 10%</h6> --}}
+        </div>
+      </div>
+    </div>
+
+    {{-- <h1>{{$durasi_peminjaman}}</h1> --}}
+
+    <div class="mb-4">
+      @if(!$durasi_peminjaman->isEmpty())
+        <div class="alert alert-warning d-flex align-items-center shadow-sm fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <div>
+                <strong>Pemberitahuan!</strong> Ada peminjaman dalam rentang tanggal <span class="fw-bold">{{ $date_from }}</span> hingga <span class="fw-bold">{{ $date_to }}</span>.
+                <ul class="mt-2 mb-0 ps-3">
+                    @foreach ($durasi_peminjaman as $data)
+                        <li class="text-dark fw-medium">
+                          📌 {{ $data->siswa->siswa_nama ?? 'Tidak Ada Nama' }} - 
+                          <span class="text-primary">{{ $data->pb_harus_kembali_tgl }}</span>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+      @else
+        <div class="alert alert-success d-flex align-items-center shadow-sm fade show" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            <div>
+                ✅ <strong>Tidak ada peminjaman</strong> dalam rentang tanggal <span class="fw-bold">{{ $date_from }}</span> hingga <span class="fw-bold">{{ $date_to }}</span>.
+            </div>
+        </div>
+      @endif
+    </div>
 
     <div class="col-md-12 grid-margin stretch-card">
       <div class="card">
         <div class="card-body">
           <div class="clearfix">
-            <h4 class="card-title float-start">Visit And Sales Statistics</h4>
+            <h4 class="card-title float-start">Grafik Peminjaman Perhari</h4>
             <div id="visit-sale-chart-legend" class="rounded-legend legend-horizontal legend-top-right float-end"></div>
           </div>
           <canvas id="visit-sale-chart" class="mt-4"></canvas>
@@ -71,104 +124,58 @@
 
 <script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
 <script src="{{ asset('asset') }}/assets/js/jquery.cookie.js"></script>
+@push('script')  
 <script>
-  // (function ($) {
-  // 'use strict';
   if ($("#visit-sale-chart").length) {
-    const ctx = document.getElementById('visit-sale-chart');
+    const ctx = document.getElementById('visit-sale-chart').getContext("2d");
 
-    var graphGradient1 = document.getElementById('visit-sale-chart').getContext("2d");
-    var graphGradient2 = document.getElementById('visit-sale-chart').getContext("2d");
-    var graphGradient3 = document.getElementById('visit-sale-chart').getContext("2d");
+    var dailyLabels = {!! json_encode($dailyLabels) !!};
+    var dailyValues = {!! json_encode($dailyValues) !!};
 
-    var gradientStrokeViolet = graphGradient1.createLinearGradient(0, 0, 0, 181);
-    gradientStrokeViolet.addColorStop(0, 'rgba(218, 140, 255, 1)');
-    gradientStrokeViolet.addColorStop(1, 'rgba(154, 85, 255, 1)');
-    var gradientLegendViolet = 'linear-gradient(to right, rgba(218, 140, 255, 1), rgba(154, 85, 255, 1))';
-
-    var gradientStrokeBlue = graphGradient2.createLinearGradient(0, 0, 0, 360);
-    gradientStrokeBlue.addColorStop(0, 'rgba(54, 215, 232, 1)');
-    gradientStrokeBlue.addColorStop(1, 'rgba(177, 148, 250, 1)');
-    var gradientLegendBlue = 'linear-gradient(to right, rgba(54, 215, 232, 1), rgba(177, 148, 250, 1))';
-
-    var gradientStrokeRed = graphGradient3.createLinearGradient(0, 0, 0, 300);
-    gradientStrokeRed.addColorStop(0, 'rgba(255, 191, 150, 1)');
-    gradientStrokeRed.addColorStop(1, 'rgba(254, 112, 150, 1)');
-    var gradientLegendRed = 'linear-gradient(to right, rgba(255, 191, 150, 1), rgba(254, 112, 150, 1))';
-    const bgColor1 = ["rgba(218, 140, 255, 1)"];
-    const bgColor2 = ["rgba(54, 215, 232, 1"];
-    const bgColor3 = ["rgba(255, 191, 150, 1)"];
+    var graphGradient = ctx.createLinearGradient(0, 0, 0, 300);
+    graphGradient.addColorStop(0, 'rgba(255, 191, 150, 1)');
+    graphGradient.addColorStop(1, 'rgba(254, 112, 150, 1)');
 
     new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG'],
-        datasets: [{
-          label: "CHN",
-          borderColor: gradientStrokeViolet,
-          backgroundColor: gradientStrokeViolet,
-          fillColor: bgColor1,
-          hoverBackgroundColor: gradientStrokeViolet,
-          pointRadius: 0,
-          fill: false,
-          borderWidth: 1,
-          fill: 'origin',
-          data: [20, 40, 15, 35, 25, 50, 30, 20],
-          barPercentage: 0.5,
-          categoryPercentage: 0.5,
-        },
-        {
-          label: "USA",
-          borderColor: gradientStrokeRed,
-          backgroundColor: gradientStrokeRed,
-          hoverBackgroundColor: gradientStrokeRed,
-          fillColor: bgColor2,
-          pointRadius: 0,
-          fill: false,
-          borderWidth: 1,
-          fill: 'origin',
-          data: [40, 30, 20, 10, 50, 15, 35, 40],
-          barPercentage: 0.5,
-          categoryPercentage: 0.5,
-        },
-        {
-          label: "UK",
-          borderColor: gradientStrokeBlue,
-          backgroundColor: gradientStrokeBlue,
-          hoverBackgroundColor: gradientStrokeBlue,
-          fillColor: bgColor3,
-          pointRadius: 0,
-          fill: false,
-          borderWidth: 1,
-          fill: 'origin',
-          data: [70, 10, 30, 40, 25, 50, 15, 30],
-          barPercentage: 0.5,
-          categoryPercentage: 0.5,
-        }
+        labels: dailyLabels,
+        datasets: [
+          {
+            label: "Jumlah Peminjaman",
+            borderColor: "rgba(254, 112, 150, 1)", // Warna garis
+            backgroundColor: graphGradient, // Warna batang dengan efek gradient
+            borderWidth: 1,
+            data: dailyValues,
+            barPercentage: 0.5,
+            categoryPercentage: 0.5,
+          }
         ]
       },
       options: {
         responsive: true,
         maintainAspectRatio: true,
-        elements: {
-          line: {
-            tension: 0.4,
-          },
-        },
         scales: {
           y: {
-            display: false,
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: "Jumlah Peminjaman"
+            },
             grid: {
               display: true,
               drawOnChartArea: true,
               drawTicks: false,
-            },
+            }
           },
           x: {
-            display: true,
+            title: {
+              display: true,
+              text: "Tanggal"
+            },
             grid: {
               display: false,
-            },
+            }
           }
         },
         plugins: {
@@ -176,152 +183,12 @@
             display: false,
           }
         }
-      },
-      plugins: [{
-        afterDatasetUpdate: function (chart, args, options) {
-          const chartId = chart.canvas.id;
-          var i;
-          const legendId = `${chartId}-legend`;
-          const ul = document.createElement('ul');
-          for (i = 0; i < chart.data.datasets.length; i++) {
-            ul.innerHTML += `
-              <li>
-                <span style="background-color: ${chart.data.datasets[i].fillColor}"></span>
-                ${chart.data.datasets[i].label}
-              </li>
-            `;
-          }
-          // alert(chart.data.datasets[0].backgroundColor);
-          return document.getElementById(legendId).appendChild(ul);
-        }
-      }]
+      }
     });
   }
-
-  if ($("#traffic-chart").length) {
-    const ctx = document.getElementById('traffic-chart');
-
-    var graphGradient1 = document.getElementById("traffic-chart").getContext('2d');
-    var graphGradient2 = document.getElementById("traffic-chart").getContext('2d');
-    var graphGradient3 = document.getElementById("traffic-chart").getContext('2d');
-
-    var gradientStrokeBlue = graphGradient1.createLinearGradient(0, 0, 0, 181);
-    gradientStrokeBlue.addColorStop(0, 'rgba(54, 215, 232, 1)');
-    gradientStrokeBlue.addColorStop(1, 'rgba(177, 148, 250, 1)');
-    var gradientLegendBlue = 'rgba(54, 215, 232, 1)';
-
-    var gradientStrokeRed = graphGradient2.createLinearGradient(0, 0, 0, 50);
-    gradientStrokeRed.addColorStop(0, 'rgba(255, 191, 150, 1)');
-    gradientStrokeRed.addColorStop(1, 'rgba(254, 112, 150, 1)');
-    var gradientLegendRed = 'rgba(254, 112, 150, 1)';
-
-    var gradientStrokeGreen = graphGradient3.createLinearGradient(0, 0, 0, 300);
-    gradientStrokeGreen.addColorStop(0, 'rgba(6, 185, 157, 1)');
-    gradientStrokeGreen.addColorStop(1, 'rgba(132, 217, 210, 1)');
-    var gradientLegendGreen = 'rgba(6, 185, 157, 1)';
-
-    // const bgColor1 = ["rgba(54, 215, 232, 1)"];
-    // const bgColor2 = ["rgba(255, 191, 150, 1"];
-    // const bgColor3 = ["rgba(6, 185, 157, 1)"];
-
-    new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: ['Search Engines 30%', 'Direct Click 30%', 'Bookmarks Click 40%'],
-        datasets: [{
-          data: [30, 30, 40],
-          backgroundColor: [gradientStrokeBlue, gradientStrokeGreen, gradientStrokeRed],
-          hoverBackgroundColor: [
-            gradientStrokeBlue,
-            gradientStrokeGreen,
-            gradientStrokeRed
-          ],
-          borderColor: [
-            gradientStrokeBlue,
-            gradientStrokeGreen,
-            gradientStrokeRed
-          ],
-          legendColor: [
-            gradientLegendBlue,
-            gradientLegendGreen,
-            gradientLegendRed
-          ]
-        }]
-      },
-      options: {
-        cutout: 50,
-        animationEasing: "easeOutBounce",
-        animateRotate: true,
-        animateScale: false,
-        responsive: true,
-        maintainAspectRatio: true,
-        showScale: true,
-        legend: false,
-        plugins: {
-          legend: {
-            display: false,
-          }
-        }
-      },
-      plugins: [{
-        afterDatasetUpdate: function (chart, args, options) {
-          const chartId = chart.canvas.id;
-          var i;
-          const legendId = `${chartId}-legend`;
-          const ul = document.createElement('ul');
-          for (i = 0; i < chart.data.datasets[0].data.length; i++) {
-            ul.innerHTML += `
-                <li>
-                  <span style="background-color: ${chart.data.datasets[0].legendColor[i]}"></span>
-                  ${chart.data.labels[i]}
-                </li>
-              `;
-          }
-          return document.getElementById(legendId).appendChild(ul);
-        }
-      }]
-    });
-  }
-
-
-
-  if ($("#inline-datepicker").length) {
-    $('#inline-datepicker').datepicker({
-      enableOnReadonly: true,
-      todayHighlight: true,
-    });
-  }
-  // if ($.cookie('purple-pro-banner') != "true") {
-  //   document.querySelector('#proBanner').classList.add('d-flex');
-  //   document.querySelector('.navbar').classList.remove('fixed-top');
-  // } else {
-  //   document.querySelector('#proBanner').classList.add('d-none');
-  //   document.querySelector('.navbar').classList.add('fixed-top');
-  // }
-
-  // if ($(".navbar").hasClass("fixed-top")) {
-  //   document.querySelector('.page-body-wrapper').classList.remove('pt-0');
-  //   document.querySelector('.navbar').classList.remove('pt-5');
-  // } else {
-  //   document.querySelector('.page-body-wrapper').classList.add('pt-0');
-  //   document.querySelector('.navbar').classList.add('pt-5');
-  //   document.querySelector('.navbar').classList.add('mt-3');
-
-  // }
-  // document.querySelector('#bannerClose').addEventListener('click', function () {
-  //   document.querySelector('#proBanner').classList.add('d-none');
-  //   document.querySelector('#proBanner').classList.remove('d-flex');
-  //   document.querySelector('.navbar').classList.remove('pt-5');
-  //   document.querySelector('.navbar').classList.add('fixed-top');
-  //   document.querySelector('.page-body-wrapper').classList.add('proBanner-padding-top');
-  //   document.querySelector('.navbar').classList.remove('mt-3');
-  //   var date = new Date();
-  //   date.setTime(date.getTime() + 24 * 60 * 60 * 1000);
-  //   $.cookie('purple-pro-banner', "true", {
-  //     expires: date
-  //   });
-  // });
-// })(jQuery);
 </script>
+
+@endpush
+
 
 

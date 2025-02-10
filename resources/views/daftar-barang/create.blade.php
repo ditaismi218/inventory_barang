@@ -44,7 +44,7 @@
             <form action="{{ route('daftar-barang.store') }}" method="POST">
             @csrf
               <div class="form-group">
-                <label for="exampleInputName1">Name Barang</label>
+                <label for="exampleInputName1">Nama Barang</label>
                 <input type="text" id="br_nama" name="br_nama" class="form-control" required placeholder="Nama Barang">
               </div>
               <div class="form-group">

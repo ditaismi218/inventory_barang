@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BarangInventaris;
 use App\Models\Peminjaman;
 use App\Models\PeminjamanBarang;
 use Illuminate\Http\Request;
@@ -22,141 +23,271 @@ class PeminjamanController extends Controller
     //     return view('peminjaman.create');
     // }
 
-    public function index()
+    public function index(Request $request)
     {
-        // Ambil data barang dari database
-       
-        $peminjaman = Peminjaman::all();
+        $search = $request->input('search');
+        // $peminjamans = Peminjaman::all();
+        $peminjamans = Peminjaman::with('siswa')
+        ->when($search, function ($query, $search) {
+            return $query->whereHas('siswa', function ($q) use ($search) {
+                $q->where('siswa_nama', 'like', "%{$search}%");
+            });
+        })
+        ->paginate(10);
+        // $peminjaman = PeminjamanBarang::with('barang')->get();
+        $peminjaman = PeminjamanBarang::with('barang', 'siswa')
+        ->whereHas('barang', function ($query) {
+            $query->whereNotIn('br_status', [2, 3]);
+        })->get();
 
+        
+        // dd('test');
         // print_r($peminjaman);
 
-        return view('peminjaman.index', compact('peminjaman'));
+        return view('peminjaman.index', compact('peminjaman', 'peminjamans'));
     }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('q');
+
+        $peminjaman = BarangInventaris::where('br_nama', 'LIKE', "%{$query}%")
+                            ->orWhere('br_kode', 'LIKE', "%{$query}%")
+                            ->paginate(3); // Sesuaikan jumlah hasil per halaman
+
+        return view('partials.barang_table', compact('peminjaman'))->render();
+    }
+
+
+    // public function create()
+    // {
+    //     $peminjaman = DB::table('tm_barang_inventaris')
+    //     ->select('tm_barang_inventaris.*', 'latest_peminjaman.pdb_sts')
+    //     ->leftJoinSub(
+    //         DB::table('td_peminjaman_barang')
+    //             ->select('br_kode', 'pdb_sts', 'created_at')
+    //             ->whereIn('br_kode', function ($query) {
+    //                 $query->select('br_kode')
+    //                     ->from('td_peminjaman_barang')
+    //                     ->groupBy('br_kode')
+    //                     ->havingRaw('MAX(created_at) = created_at');
+    //             })
+    //             ->where('pdb_sts', '=', 0), 
+    //         'latest_peminjaman',
+    //         function ($join) {
+    //             $join->on('tm_barang_inventaris.br_kode', '=', 'latest_peminjaman.br_kode');
+    //         }
+    //     )
+    //     ->whereNotIn('tm_barang_inventaris.br_kode', function ($query) {
+    //         $query->select('br_kode')
+    //             ->from('td_peminjaman_barang')
+    //             ->where('pdb_sts', '=', 1);
+    //     })
+    //     ->orderBy('latest_peminjaman.created_at', 'desc')
+    //     ->paginate(3);
+
+    //     // print_r($peminjaman);
+    //     return view('peminjaman.create', compact('peminjaman'));
+    // }
 
     public function create()
     {
         $peminjaman = DB::table('tm_barang_inventaris')
-        ->select('tm_barang_inventaris.*', 'latest_peminjaman.pdb_sts')
-        ->leftJoinSub(
-            DB::table('td_peminjaman_barang')
-                ->select('br_kode', 'pdb_sts', 'created_at')
-                ->whereIn('br_kode', function ($query) {
-                    $query->select('br_kode')
-                        ->from('td_peminjaman_barang')
-                        ->groupBy('br_kode')
-                        ->havingRaw('MAX(created_at) = created_at');
-                })
-                ->where('pdb_sts', '=', 0), 
-            'latest_peminjaman',
-            function ($join) {
-                $join->on('tm_barang_inventaris.br_kode', '=', 'latest_peminjaman.br_kode');
-            }
-        )
-        ->whereNotIn('tm_barang_inventaris.br_kode', function ($query) {
-            $query->select('br_kode')
-                ->from('td_peminjaman_barang')
-                ->where('pdb_sts', '=', 1);
-        })
-        ->orderBy('latest_peminjaman.created_at', 'desc')
-        ->get();
+            ->select('tm_barang_inventaris.*', 'latest_peminjaman.pdb_sts')
+            ->leftJoinSub(
+                DB::table('td_peminjaman_barang')
+                    ->select('br_kode', 'pdb_sts', 'created_at')
+                    ->whereIn('br_kode', function ($query) {
+                        $query->select('br_kode')
+                            ->from('td_peminjaman_barang')
+                            ->groupBy('br_kode')
+                            ->havingRaw('MAX(created_at) = created_at');
+                    })
+                    ->where('pdb_sts', '=', 0), 
+                'latest_peminjaman',
+                function ($join) {
+                    $join->on('tm_barang_inventaris.br_kode', '=', 'latest_peminjaman.br_kode');
+                }
+            )
+            ->whereNotIn('tm_barang_inventaris.br_kode', function ($query) {
+                $query->select('br_kode')
+                    ->from('td_peminjaman_barang')
+                    ->where('pdb_sts', '=', 1);
+            })
+            ->orderBy('latest_peminjaman.created_at', 'desc')
+            ->paginate(3);
 
-        // print_r($peminjaman);
-        return view('peminjaman.create', compact('peminjaman'));
+        // Ambil data siswa dari database
+        $siswas = DB::table('tm_siswa')->get(); 
+
+        return view('peminjaman.create', compact('peminjaman', 'siswas'));
     }
 
+
+    // public function store(Request $request)
+    // {
+    //     $validated = $request->validate([
+    //         'pb_no_siswa' => 'required',
+    //         'pb_nama_siswa' => 'required',
+    //         'pb_harus_kembali_tgl' => 'required|date',
+    //         'data_peminjaman' => 'required|array',
+    //         'data_peminjaman.*.br_kode' => 'required',
+    //         // 'data_peminjaman.*.pbd_sts' => 'required',
+    //     ]);
+
+    //     DB::beginTransaction();
+    //     try {
+    //         $pb_id = 'PJ' . date('Y-m') . str_pad(Peminjaman::count() + 1, 4, '0', STR_PAD_LEFT);
+    //         $pb_tgl = date(now());
+
+    //         // Create Peminjaman
+    //         $peminjaman = Peminjaman::create([
+    //             'pb_id' => $pb_id,
+    //             'user_id' => Auth::user()->user_id,
+    //             'pb_tgl' => $pb_tgl,
+    //             'pb_no_siswa' => $validated['pb_no_siswa'],
+    //             'pb_nama_siswa' => $validated['pb_nama_siswa'],
+    //             'pb_harus_kembali_tgl' => $validated['pb_harus_kembali_tgl'],
+    //             'pb_stat' => '1',
+    //         ]);
+
+    //         // Loop untuk memasukkan data peminjaman barang
+    //         foreach ($validated['data_peminjaman'] as $index => $item) {
+    //             // Buat ID unik untuk peminjaman barang
+    //             $pbd_id = $pb_id . str_pad($index + 1, 4, '0', STR_PAD_LEFT);
+
+    //             // Simpan PeminjamanBarang
+    //             $peminjaman_barang = PeminjamanBarang::create([
+    //                 'pbd_id' => $pbd_id,
+    //                 'pb_id' => $peminjaman->pb_id,
+    //                 'br_kode' => $item['br_kode'],
+    //                 'pdb_tanggal' => date(now()),
+    //                 'pdb_sts' => '1',
+    //             ]);
+
+    //             // dd($peminjaman_barang['pdb_tanggal']);
+    //         }
+
+    //         // Commit transaksi jika berhasil
+    //         DB::commit();
+    //         return redirect()->route('peminjaman.index')->with('success', 'Data Berhasil ditambahkan');
+
+    //     } catch (\Throwable $th) {
+    //         // Rollback jika ada error
+    //         DB::rollBack();
+    //         \Log::error($th->getMessage());
+    //         return redirect()->back()->with('error', 'Data gagal ditambahkan');
+    //     }
+    // }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'pb_no_siswa' => 'required',
-            'pb_nama_siswa' => 'required',
+            'siswa_id' => 'required|exists:tm_siswa,siswa_id',
             'pb_harus_kembali_tgl' => 'required|date',
             'data_peminjaman' => 'required|array',
             'data_peminjaman.*.br_kode' => 'required',
-            // 'data_peminjaman.*.pbd_sts' => 'required',
         ]);
 
         DB::beginTransaction();
         try {
             $pb_id = 'PJ' . date('Y-m') . str_pad(Peminjaman::count() + 1, 4, '0', STR_PAD_LEFT);
-            $pb_tgl = date(now());
+            $pb_tgl = now();
 
             // Create Peminjaman
             $peminjaman = Peminjaman::create([
                 'pb_id' => $pb_id,
                 'user_id' => Auth::user()->user_id,
+                'siswa_id' => $validated['siswa_id'],
                 'pb_tgl' => $pb_tgl,
-                'pb_no_siswa' => $validated['pb_no_siswa'],
-                'pb_nama_siswa' => $validated['pb_nama_siswa'],
                 'pb_harus_kembali_tgl' => $validated['pb_harus_kembali_tgl'],
                 'pb_stat' => '1',
             ]);
 
             // Loop untuk memasukkan data peminjaman barang
             foreach ($validated['data_peminjaman'] as $index => $item) {
-                // Buat ID unik untuk peminjaman barang
                 $pbd_id = $pb_id . str_pad($index + 1, 4, '0', STR_PAD_LEFT);
-
-                // Simpan PeminjamanBarang
-                $peminjaman_barang = PeminjamanBarang::create([
+                PeminjamanBarang::create([
                     'pbd_id' => $pbd_id,
                     'pb_id' => $peminjaman->pb_id,
                     'br_kode' => $item['br_kode'],
-                    'pdb_tanggal' => date(now()),
+                    'pdb_tanggal' => now(),
                     'pdb_sts' => '1',
                 ]);
-
-                // dd($peminjaman_barang['pdb_tanggal']);
             }
 
-            // Commit transaksi jika berhasil
             DB::commit();
             return redirect()->route('peminjaman.index')->with('success', 'Data Berhasil ditambahkan');
 
         } catch (\Throwable $th) {
-            // Rollback jika ada error
             DB::rollBack();
-            \Log::error($th->getMessage());
+            Log::error($th->getMessage());
             return redirect()->back()->with('error', 'Data gagal ditambahkan');
         }
     }
 
+    // public function edit($id)
+    // {
+    //     // Ambil data peminjaman berdasarkan ID
+    //     $peminjaman = Peminjaman::with('peminjaman_barang')->where('pb_id', $id)->first();
+
+    //     // Ambil data barang dari database untuk dropdown
+    //     $barang = DB::table('tm_barang_inventaris')->select('br_kode', 'br_nama')->get();
+
+    //     if (!$peminjaman) {
+    //         return redirect()->route('peminjaman.index')->with('error', 'Data tidak ditemukan');
+    //     }
+
+    //     return view('peminjaman.edit', compact('peminjaman', 'barang'));
+    // }
+
+    // public function update(Request $request, $pb_id)
+    // {
+    //     // Validasi data
+    //     $validated = $request->validate([
+    //         'pb_no_siswa' => 'required|max:10',
+    //         'pb_nama_siswa' => 'required|max:50',
+    //         'pb_harus_kembali_tgl' => 'required|date',
+    //     ], [
+    //         'pb_no_siswa.required' => 'Nomor siswa wajib diisi.',
+    //         'pb_no_siswa.max' => 'Nomor siswa maksimal 10 karakter.',
+    //         'pb_nama_siswa.required' => 'Nama siswa wajib diisi.',
+    //         'pb_nama_siswa.max' => 'Nama siswa maksimal 50 karakter.',
+    //         'pb_harus_kembali_tgl.required' => 'Tanggal pengembalian wajib diisi.',
+    //         'pb_harus_kembali_tgl.date' => 'Tanggal pengembalian harus berupa format tanggal yang valid.',
+    //     ]);
+    
+    //     // Update data peminjaman
+    //     $peminjaman = Peminjaman::findOrFail($pb_id);
+    //     $peminjaman->update($validated);
+    
+    //     // Redirect dengan pesan sukses
+    //     return redirect()->route('peminjaman.index')->with('success', 'Data berhasil diperbarui.');
+    // }
+
     public function edit($id)
     {
-        // Ambil data peminjaman berdasarkan ID
-        $peminjaman = Peminjaman::with('peminjaman_barang')->where('pb_id', $id)->first();
-
-        // Ambil data barang dari database untuk dropdown
+        $peminjaman = Peminjaman::with('peminjaman_barang', 'siswa')->where('pb_id', $id)->first();
         $barang = DB::table('tm_barang_inventaris')->select('br_kode', 'br_nama')->get();
+        $siswas = DB::table('tm_siswa')->select('siswa_id', 'siswa_nama')->get();
 
         if (!$peminjaman) {
             return redirect()->route('peminjaman.index')->with('error', 'Data tidak ditemukan');
         }
 
-        return view('peminjaman.edit', compact('peminjaman', 'barang'));
+        return view('peminjaman.edit', compact('peminjaman', 'barang', 'siswas'));
     }
 
     public function update(Request $request, $pb_id)
     {
-        // Validasi data
         $validated = $request->validate([
-            'pb_no_siswa' => 'required|max:10',
-            'pb_nama_siswa' => 'required|max:50',
+            'siswa_id' => 'required|exists:tm_siswa,siswa_id',
             'pb_harus_kembali_tgl' => 'required|date',
-        ], [
-            'pb_no_siswa.required' => 'Nomor siswa wajib diisi.',
-            'pb_no_siswa.max' => 'Nomor siswa maksimal 10 karakter.',
-            'pb_nama_siswa.required' => 'Nama siswa wajib diisi.',
-            'pb_nama_siswa.max' => 'Nama siswa maksimal 50 karakter.',
-            'pb_harus_kembali_tgl.required' => 'Tanggal pengembalian wajib diisi.',
-            'pb_harus_kembali_tgl.date' => 'Tanggal pengembalian harus berupa format tanggal yang valid.',
         ]);
-    
-        // Update data peminjaman
+
         $peminjaman = Peminjaman::findOrFail($pb_id);
         $peminjaman->update($validated);
-    
-        // Redirect dengan pesan sukses
+
         return redirect()->route('peminjaman.index')->with('success', 'Data berhasil diperbarui.');
     }
 
@@ -180,21 +311,30 @@ class PeminjamanController extends Controller
         }
     }
 
+    // public function show($id)
+    // {
+    //     // Ambil data peminjaman dan barang terkait
+    //     $data['peminjaman'] = Peminjaman::where('pb_id', $id)->first();
+    //     $data['peminjaman_barang'] = PeminjamanBarang::where('pb_id', $id)->get();
+
+    //     // if (!$peminjaman) {
+    //     //     return redirect()->route('peminjaman.index')->with('error', 'Data tidak ditemukan');
+    //     // }
+
+    //     // return view('peminjaman.show', compact('peminjaman', 'peminjaman_barang'));
+
+    //     return view('peminjaman.show', $data);
+
+    //     // print_r($peminjaman);
+    // }
+
     public function show($id)
     {
-        // Ambil data peminjaman dan barang terkait
-        $data['peminjaman'] = Peminjaman::where('pb_id', $id)->first();
+        $data['peminjaman'] = Peminjaman::with('siswa')->where('pb_id', $id)->first();
         $data['peminjaman_barang'] = PeminjamanBarang::where('pb_id', $id)->get();
 
-        // if (!$peminjaman) {
-        //     return redirect()->route('peminjaman.index')->with('error', 'Data tidak ditemukan');
-        // }
-
-        // return view('peminjaman.show', compact('peminjaman', 'peminjaman_barang'));
-
         return view('peminjaman.show', $data);
-
-        // print_r($peminjaman);
     }
+
 
 }

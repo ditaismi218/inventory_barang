@@ -9,10 +9,10 @@ class LaporanPengembalianBarangController extends Controller
 {
     public function index()
     {
-        // Ambil data transaksi pengembalian barang yang sudah dikembalikan
         $data['pengembalian_data'] = DB::table('tm_pengembalian')
             ->join('tm_peminjaman', 'tm_peminjaman.pb_id', '=', 'tm_pengembalian.pb_id')
-            ->select('tm_pengembalian.*', 'tm_peminjaman.pb_nama_siswa')
+            ->join('tm_siswa', 'tm_siswa.siswa_id', '=', 'tm_peminjaman.siswa_id') // Join ke siswa
+            ->select('tm_pengembalian.*', 'tm_siswa.siswa_nama') // Ambil siswa_nama
             ->where('tm_pengembalian.kembali_sts', '1') // Status sudah dikembalikan
             ->get();
 

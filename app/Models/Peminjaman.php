@@ -15,7 +15,7 @@ class Peminjaman extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
-        'pb_id', 'user_id', 'pb_no_siswa', 'pb_nama_siswa', 'pb_tgl', 'pb_harus_kembali_tgl', 'pb_stat'
+        'pb_id', 'user_id', 'siswa_id', 'pb_tgl', 'pb_harus_kembali_tgl', 'pb_stat'
     ];
 
     // protected $casts = [
@@ -25,5 +25,9 @@ class Peminjaman extends Model
 
     public function peminjaman_barang(){
         return $this->hasMany(PeminjamanBarang::class, 'pb_id', 'pb_id');
+    }
+
+    public function siswa(){
+        return $this->belongsTo(Siswa::class, 'siswa_id', 'siswa_id');
     }
 }

@@ -22,4 +22,15 @@ class Pengembalian extends Model
     {
         return $this->hasMany(Peminjaman::class, 'pb_id', 'pb_id');
     }
+
+    public function barangInventaris()
+    {
+        return $this->belongsTo(BarangInventaris::class, 'br_kode', 'br_kode');
+    }
+
+    public function siswa()
+    {
+        return $this->belongsTo(Siswa::class, 'siswa_id', 'siswa_id');
+    }
+
 }

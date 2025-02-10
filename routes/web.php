@@ -3,13 +3,17 @@
 use App\Http\Controllers\BarangInventarisController;
 use App\Http\Controllers\daftarBarangController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\JenisBarangController;
+use App\Http\Controllers\JurusanController;
+use App\Http\Controllers\KelasController;
 use App\Http\Controllers\LaporanDaftarBarangController;
 use App\Http\Controllers\LaporanPengembalianBarangController;
 use App\Http\Controllers\LaporanStatusBarangController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\PengembalianController;
+use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\user;
@@ -66,5 +70,38 @@ Route::get('/laporan-daftar-barang', [LaporanDaftarBarangController::class, 'ind
 Route::get('/laporan-status-barang', [LaporanStatusBarangController::class, 'index'])->name('laporan.status-barang');
 Route::get('/laporan-pengembalian-barang', [LaporanPengembalianBarangController::class, 'index'])->name('laporan.pengembalian-barang');
 
-Route::get('/daftar-pengguna', [UserController::class, 'index'])->name('users.index');
+Route::get('/export/pdf', [ExportController::class, 'exportPDF'])->name('export.pdf');
+Route::get('/export/excel', [ExportController::class, 'exportExcel'])->name('export.excel');
+Route::get('/export/csv', [ExportController::class, 'exportCSV'])->name('export.csv');
+
+Route::get('/users', [UserController::class, 'index'])->name('users.index'); // Tampilkan daftar user
+    Route::get('/users/create', [UserController::class, 'create'])->name('users.create'); // Form tambah user
+    Route::post('/users', [UserController::class, 'store'])->name('users.store'); // Simpan user baru
+    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit'); // Form edit user
+    Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update'); // Update user
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy'); // Hapus user
+    Route::patch('/users/{user}/status', [UserController::class, 'toggleStatus'])->name('users.toggleStatus'); // Aktif/Nonaktifkan user
+
+Route::get('/peminjaman/search', [PeminjamanController::class, 'search'])->name('peminjaman.search');
+
+Route::get('/jurusan', [JurusanController::class, 'index'])->name('jurusan.index'); // Menampilkan daftar jurusan
+Route::get('/jurusan/create', [JurusanController::class, 'create'])->name('jurusan.create'); // Form tambah jurusan
+Route::post('/jurusan', [JurusanController::class, 'store'])->name('jurusan.store'); // Simpan jurusan ke database
+Route::get('/jurusan/{jurusan}/edit', [JurusanController::class, 'edit'])->name('jurusan.edit'); // Form edit jurusan
+Route::put('/jurusan/{jurusan}', [JurusanController ::class, 'update'])->name('jurusan.update'); // Update jurusan
+Route::delete('/jurusan/{jurusan}', [JurusanController::class, 'destroy'])->name('jurusan.destroy'); // Hapus jurusan
+
+Route::get('/kelas', [KelasController::class, 'index'])->name('kelas.index');
+Route::get('/kelas/create', [KelasController::class, 'create'])->name('kelas.create');
+Route::post('/kelas', [KelasController::class, 'store'])->name('kelas.store');
+Route::get('/kelas/{kelas}/edit', [KelasController::class, 'edit'])->name('kelas.edit');
+Route::put('/kelas/{kelas}', [KelasController::class, 'update'])->name('kelas.update');
+Route::delete('/kelas/{kelas}', [KelasController::class, 'destroy'])->name('kelas.destroy');
+
+Route::get('/siswa', [SiswaController::class, 'index'])->name('siswa.index');
+Route::get('/siswa/create', [SiswaController::class, 'create'])->name('siswa.create');
+Route::post('/siswa', [SiswaController::class, 'store'])->name('siswa.store');
+Route::get('/siswa/{siswa}/edit', [SiswaController::class, 'edit'])->name('siswa.edit');
+Route::put('/siswa/{siswa}', [SiswaController::class, 'update'])->name('siswa.update');
+Route::delete('/siswa/{siswa}', [SiswaController::class, 'destroy'])->name('siswa.destroy');
 });

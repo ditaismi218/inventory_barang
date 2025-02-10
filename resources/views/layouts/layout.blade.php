@@ -52,7 +52,7 @@
                   <span class="availability-status online"></span>
                 </div>
                 <div class="nav-profile-text">
-                  <p class="mb-1 text-black">{{ Auth::user()->user_hak }}</p>
+                  <p class="mb-1 text-black">{{ Auth::user()->user_nama }}</p>
                 </div>
               </a>
 
@@ -63,11 +63,8 @@
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                   @csrf
                 </form>
-              </div>
-                         
-
+              </div>       
             </li>
-            
             
             <li class="nav-item dropdown">
               <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-bs-toggle="dropdown">
@@ -148,6 +145,8 @@
                 <i class="mdi mdi-home menu-icon"></i>
               </a>
             </li>
+
+            @if(Auth::user()->user_hak == 'SU' || Auth::user()->user_hak == 'OP')
             <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="collapse" href="#daftarbarang" aria-expanded="false" aria-controls="daftarbarang">
                   <span class="menu-title">Daftar Barang</span>
@@ -167,7 +166,9 @@
                   </ul>
                 </div>
             </li>
+            @endif
 
+            @if(Auth::user()->user_hak == 'SU' || Auth::user()->user_hak == 'OP')
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="collapse" href="#icons" aria-expanded="false" aria-controls="icons">
                 <span class="menu-title">Peminjaman Barang</span>
@@ -188,6 +189,7 @@
                 </ul>
               </div>
             </li>
+            @endif
 
             @if(Auth::user()->user_hak == 'SU' || Auth::user()->user_hak == 'AD')
             <li class="nav-item">
@@ -228,6 +230,15 @@
                     <li class="nav-item">
                       <a class="nav-link" href="{{ route('users.index') }}"> Daftar Pengguna </a>
                     </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{{ route('jurusan.index') }}"> Daftar Jurusan </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{{ route('kelas.index') }}"> Daftar Kelas </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{{ route('siswa.index') }}"> Daftar Siswa </a>
+                    </li>
                 
                   </ul>
                 </div>
@@ -257,6 +268,7 @@
     </div>
     <!-- container-scroller -->
     <!-- plugins:js -->
+    
     <script src="{{ asset('asset') }}/assets/vendors/js/vendor.bundle.base.js"></script>
     
     <!-- endinject -->
@@ -272,7 +284,8 @@
     <script src="{{ asset('asset') }}/assets/js/jquery.cookie.js"></script>
     <!-- endinject -->
     <!-- Custom js for this page -->
-    <script src="{{ asset('asset') }}/assets/js/dashboard.js"></script>
+    {{-- <script src="{{ asset('asset') }}/assets/js/dashboard.js"></script> --}}
+    @stack('script')
     <!-- End custom js for this page -->
   </body>
 </html>

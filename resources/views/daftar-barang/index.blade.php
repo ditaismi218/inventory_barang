@@ -32,6 +32,7 @@
                 <tbody>
                   @foreach($barangInventaris as $index => $barang)
                     <tr>
+                      
                       <td>{{ $index + 1 }}</td>
                       <td>{{ $barang->br_kode }}</td>
                       <td>{{ $barang->br_nama }}</td>
@@ -39,7 +40,8 @@
                       <td>{{ $barang->br_tgl_terima ?? 'Tidak ada' }}</td>
                       <td>{{ $barang->br_tgl_entry }}</td> 
                       <td>{{ $barang->br_status ?? 'Tidak ada' }}</td>
-                      <td>{{ $barang->pdb_sts == '0' ? 'Tersedia' : 'Dipinjam'}}-{{ $barang->pdb_sts}}</td>
+                      <td>{{ $barang->pdb_sts == '0' ? 'Tersedia' : 'Dipinjam'}}</td>
+                      {{-- <td>{{ $barang->pdb_sts == '0' ? 'Tersedia' : 'Dipinjam'}}-{{ $barang->pdb_sts}}</td> --}}
                       <td class="text-center">
                         <a href="{{ route('daftar-barang.edit', $barang->br_kode) }}" class="btn btn-warning btn-sm">
                             <i class="fa fa-edit"></i>
